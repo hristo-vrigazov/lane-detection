@@ -1,4 +1,6 @@
 import math
+import numpy as np
+from imutils import auto_canny
 
 def grayscale(img):
     """Applies the Grayscale transform
@@ -136,3 +138,23 @@ def weighted_img(img, initial_img, α=0.8, β=1., λ=0.):
     NOTE: initial_img and img must be the same shape!
     """
     return cv2.addWeighted(initial_img, α, img, β, λ)
+
+def create_region_of_interest(img_shape):
+    width = img_shape[1]
+    height = img_shape[0]
+    
+    down_left = (0, height)
+    middle = (int(width/2), int(height/2))
+    down_right = (width, height)
+    
+    polygon = np.array([down_left, middle, down_right])
+    return np.array([polygon])
+
+def lane_detection_pipeline(img, gaussian_kernel_size=5, rho=1, theta=np.pi/60.0, threshold=70, 
+                            min_line_len=40, max_line_gap=50):
+    result = grayscale(img)
+    result = gaussian_blur(img, gaussian_kernel_size)
+    result = auto_canny(result)
+    result = region_of_interest(result, create_region_of_interest(img.shape))
+    lines_image = hough_lines(result, rho, theta, threshold, min_line_len, max_line_gap)
+    return weighted_img(lines_image, img)
