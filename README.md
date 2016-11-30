@@ -15,9 +15,14 @@ $ source activate root
 
 You should be able to import cv2 and moviepy
 
-# Usage
+# Usage for images
 ```bash
 python detect_lanes.py -i --input_file_name input_images/solidWhiteRight.jpg --output_file_name output_images/output_solidWhiteRight.jpg
 ```
 ![alt tag](https://raw.githubusercontent.com/hristo-vrigazov/lane-detection/master/input_images/solidWhiteCurve.jpg)
 ![alt tag](https://raw.githubusercontent.com/hristo-vrigazov/lane-detection/master/output_images/output_solidWhiteRight.jpg)
+
+# Usage for videos
+```bash
+python detect_lanes.py -v --input_file_name input_videos/solidWhiteRight.mp4 --output_file_name output_videos/output_solidWhiteRight.mp4
+```
