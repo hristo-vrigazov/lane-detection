@@ -1,5 +1,6 @@
 import math
 import numpy as np
+import cv2
 from imutils import auto_canny
 
 def grayscale(img):
