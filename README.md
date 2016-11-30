@@ -10,6 +10,7 @@ $ source activate root
 (root) $ conda install -c https://conda.anaconda.org/menpo opencv3
 (root) $ pip install moviepy
 (root) $ pip install click
+(root) $ pip install imutils
 ```
 
 You should be able to import cv2 and moviepy
