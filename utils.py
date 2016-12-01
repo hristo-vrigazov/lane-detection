@@ -82,6 +82,11 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=2):
                 continue
             m = ((y2 - y1) / (x2 - x1))
             b = y1 - m * x1
+
+            # Filter outliers
+            if abs(m) < 0.5:
+                continue
+
             if m > 0:
                 left_line_m_sum += m
                 left_line_b_sum += b
@@ -145,17 +150,18 @@ def create_region_of_interest(img_shape):
     height = img_shape[0]
     
     down_left = (0, height)
-    middle = (int(width/2), int(height/2))
+    middle = (int(width/1.9), int(height/1.9))
     down_right = (width, height)
     
     polygon = np.array([down_left, middle, down_right])
     return np.array([polygon])
 
-def lane_detection_pipeline(img, gaussian_kernel_size=5, rho=1, theta=np.pi/60.0, threshold=70, 
-                            min_line_len=40, max_line_gap=50):
+def lane_detection_pipeline(img, gaussian_kernel_size=3, rho=1, theta=np.pi/180.0, threshold=40, 
+                            min_line_len=40, max_line_gap=80):
     result = grayscale(img)
-    result = gaussian_blur(img, gaussian_kernel_size)
+    result = gaussian_blur(result, gaussian_kernel_size)
     result = auto_canny(result)
     result = region_of_interest(result, create_region_of_interest(img.shape))
+    result = cv2.equalizeHist(result)
     lines_image = hough_lines(result, rho, theta, threshold, min_line_len, max_line_gap)
     return weighted_img(lines_image, img)
